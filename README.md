@@ -1,130 +1,199 @@
 # 파일 업로드 시스템 - 확장자 차단 기능
 
-파일 업로드 기능과 확장자 차단 시스템을 갖춘 웹 애플리케이션입니다.
+> **마드라스체크 서버 개발자 과제**
+> Node.js + Express + MySQL을 활용한 파일 업로드 및 확장자 차단 시스템
+
+---
+
+## 👔 채용담당자님께
+
+### ⚡ 빠른 확인 방법 (3가지 중 선택)
+
+#### 1️⃣ 라이브 데모 확인 (가장 빠름 - 10초)
+👉 **[배포된 사이트 바로 확인하기](https://your-app.up.railway.app)** ← 배포 후 링크 업데이트
+
+Railway에 배포된 실제 동작 환경을 즉시 확인하실 수 있습니다.
+
+#### 2️⃣ Docker로 로컬 실행 (가장 쉬움 - 1분)
+```bash
+git clone https://github.com/zpdl768/flow-assignment.git
+cd flow-assignment
+docker-compose up
+```
+→ `http://localhost:3000` 접속
+
+**끝!** MySQL 설치, DB 설정 등 모든 것이 자동으로 처리됩니다.
+
+#### 3️⃣ Railway에 직접 배포해보기 (5분)
+상세한 가이드는 **[DEPLOY.md](./DEPLOY.md)** 참고
+- GitHub 계정만 있으면 OK
+- 클릭 몇 번으로 배포 완료
+- DB 초기화 자동 처리
+
+---
+
+### 🎯 과제 요구사항 구현 내용
+
+#### ✅ 필수 구현 사항
+- **파일 업로드**: Multer 기반 multipart/form-data 처리
+- **확장자 차단**: 고정 확장자 7개 + 커스텀 확장자 최대 200개
+- **상태 유지**: MySQL DB 저장으로 새로고침 시에도 설정 유지
+- **RESTful API**: 표준 REST 규약 준수
+
+#### 💎 추가 구현 사항
+- **반응형 UI/UX**: 드래그 앤 드롭 + 파일 선택
+- **실시간 검증**: 클라이언트/서버 이중 검증
+- **보안 강화**: SQL Injection 방지, 파일 크기 제한
+- **Docker 컨테이너화**: 한 번에 실행 가능한 환경
+- **자동 DB 초기화**: 배포 시 테이블 자동 생성
+- **클라우드 배포**: Railway 무료 호스팅
+
+---
+
+### 🛠️ 기술 스택 & 아키텍처
+
+**Backend (Node.js)**
+- Express.js 4.18 - 경량 웹 프레임워크
+- MySQL 8.0 - 관계형 데이터베이스
+- Multer 2.0 - 파일 업로드 미들웨어
+
+**Frontend (Vanilla JS)**
+- HTML5 + CSS3 - 시맨틱 마크업
+- JavaScript ES6+ - 모듈 패턴
+- Fetch API - 비동기 통신
+
+**DevOps**
+- Docker + Docker Compose
+- Railway - 클라우드 배포
+- Git - 버전 관리
+
+**아키텍처 패턴**
+- MVC 구조 (Model-View-Controller)
+- RESTful API 설계
+- 환경 변수 기반 설정 관리
+
+---
+
+### 📊 주요 기능 데모
+
+#### 1. 고정 확장자 관리
+- 7개 기본 확장자: `bat`, `cmd`, `com`, `cpl`, `exe`, `scr`, `js`
+- 체크박스로 차단 ON/OFF
+- **DB 저장으로 영구 보존**
+
+#### 2. 커스텀 확장자 관리
+- 사용자 정의 확장자 추가
+- 실시간 중복 검증
+- 최대 200개 제한
+- 삭제 기능
+
+#### 3. 파일 업로드
+- 드래그 앤 드롭 지원
+- 10MB 크기 제한
+- 차단 확장자 업로드 거부
+- 성공/실패 알림
+
+---
 
 ## 📋 프로젝트 개요
 
-- **기술 스택**: Node.js, Express.js, MySQL, HTML5, CSS3, Vanilla JavaScript
-- **주요 기능**:
-  - 드래그 앤 드롭 및 파일 선택을 통한 파일 업로드
-  - 고정 확장자 차단 설정 (새로고침 시에도 유지)
-  - 커스텀 확장자 추가/삭제 (최대 200개)
-  - RESTful API 구조
+### 기술 스택
+- **Backend**: Node.js 18, Express.js 4.18
+- **Database**: MySQL 8.0
+- **Frontend**: HTML5, CSS3, Vanilla JavaScript
+- **File Upload**: Multer 2.0
+- **Deployment**: Docker, Railway
 
-## 🌐 라이브 데모
-
-👉 **[여기를 클릭하여 바로 확인하기](#)** (배포 후 링크 업데이트)
+### 핵심 기능
+- ✅ 파일 업로드 (드래그 앤 드롭 + 파일 선택)
+- ✅ 고정 확장자 차단 설정 (새로고침 시에도 유지)
+- ✅ 커스텀 확장자 추가/삭제 (최대 200개)
+- ✅ RESTful API 구조
+- ✅ 보안 검증 (SQL Injection 방지, 파일 크기 제한)
 
 ---
 
-## 🚀 시작하기
+## 🚀 빠른 시작
 
-## 🐳 Docker로 빠르게 실행 (권장)
+### 🐳 Docker로 실행 (권장 - 가장 쉬움)
 
-Docker와 Docker Compose만 설치되어 있으면 **한 번의 명령어로** 실행 가능합니다.
-
-### 사전 요구사항
-- Docker Desktop 설치
-
-### 실행 방법
 ```bash
 # 1. 저장소 클론
-git clone <repository-url>
+git clone https://github.com/zpdl768/flow-assignment.git
 cd flow-assignment
 
-# 2. Docker Compose로 실행 (MySQL + Node.js 앱 모두 자동 실행)
+# 2. Docker Compose로 실행 (MySQL + Node.js 모두 자동 실행)
 docker-compose up
 
 # 3. 브라우저에서 접속
-# http://localhost:3000
+open http://localhost:3000
 ```
 
-**끝!** MySQL 설치, 데이터베이스 생성, 환경 변수 설정이 모두 자동으로 처리됩니다.
+**끝!** MySQL 설치, DB 생성, 테이블 초기화가 모두 자동으로 처리됩니다.
 
-### 종료 방법
+**종료:**
 ```bash
-# Ctrl+C 또는
-docker-compose down
+Ctrl+C 또는 docker-compose down
 ```
 
 ---
 
-## 💻 수동 설치 및 실행 (Docker 없이)
+### 💻 수동 설치 (Docker 없이)
 
-### 사전 요구사항
+<details>
+<summary><b>클릭하여 펼치기</b></summary>
 
-- Node.js (v14 이상)
-- MySQL (v5.7 이상 또는 v8.0)
+#### 사전 요구사항
+- Node.js v14 이상
+- MySQL v8.0
 - npm 또는 yarn
 
-### 설치 및 실행
+#### 설치 단계
 
-#### 1. 저장소 클론
-
+1. **저장소 클론**
 ```bash
-git clone <repository-url>
+git clone https://github.com/zpdl768/flow-assignment.git
 cd flow-assignment
 ```
 
-#### 2. 의존성 패키지 설치
-
+2. **의존성 설치**
 ```bash
 npm install
 ```
 
-#### 3. MySQL 데이터베이스 설정
-
-MySQL에 접속하여 데이터베이스를 생성하고 테이블을 설정합니다:
-
+3. **MySQL 데이터베이스 설정**
 ```bash
 mysql -u root -p < server/models/db.sql
 ```
 
-또는 MySQL 클라이언트에서 직접 실행:
-
-```sql
-source server/models/db.sql
-```
-
-#### 4. 환경 변수 설정
-
-`.env.example` 파일을 `.env`로 복사하고 MySQL 연결 정보를 입력합니다:
-
+4. **환경 변수 설정**
 ```bash
 cp .env.example .env
 ```
 
-`.env` 파일을 열고 MySQL 비밀번호를 수정합니다:
-
+`.env` 파일 수정:
 ```env
-# MySQL Database Configuration
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=your_mysql_password  # <- 여기에 실제 비밀번호 입력
+DB_PASSWORD=your_mysql_password  # 실제 비밀번호 입력
 DB_NAME=file_upload_db
 DB_PORT=3306
-
-# Server Configuration
 PORT=3000
 ```
 
-#### 5. 서버 실행
-
+5. **서버 실행**
 ```bash
 npm start
 ```
 
-개발 모드 (nodemon 사용):
-
-```bash
-npm run dev
-```
-
-#### 6. 브라우저에서 접속
-
+6. **접속**
 ```
 http://localhost:3000
 ```
+
+</details>
+
+---
 
 ## 📁 프로젝트 구조
 
@@ -132,107 +201,237 @@ http://localhost:3000
 flow-assignment/
 ├── server/
 │   ├── config/
-│   │   └── database.js          # MySQL 연결 설정
-│   ├── routes/
-│   │   ├── extensions.js        # 확장자 관련 API 라우트
-│   │   └── upload.js            # 파일 업로드 API 라우트
+│   │   ├── database.js          # MySQL 연결 풀 설정
+│   │   └── initDB.js            # DB 자동 초기화 스크립트 (신규)
 │   ├── controllers/
-│   │   ├── extensionController.js  # 확장자 로직
-│   │   └── uploadController.js     # 파일 업로드 로직
+│   │   ├── extensionController.js  # 확장자 비즈니스 로직
+│   │   └── uploadController.js     # 파일 업로드 비즈니스 로직
+│   ├── routes/
+│   │   ├── extensions.js        # 확장자 API 라우트
+│   │   └── upload.js            # 업로드 API 라우트
 │   ├── models/
 │   │   └── db.sql               # 데이터베이스 스키마
 │   └── server.js                # Express 서버 진입점
 ├── public/
-│   ├── index.html               # 메인 HTML
+│   ├── index.html               # 메인 페이지
 │   ├── style.css                # 스타일시트
-│   └── script.js                # 클라이언트 JavaScript
-├── uploads/                     # 업로드된 파일 저장소
-├── .env                         # 환경 변수
-├── .gitignore                   # Git 제외 파일
-├── package.json                 # 프로젝트 설정
-└── README.md                    # 프로젝트 문서
+│   └── script.js                # 클라이언트 로직
+├── uploads/                     # 업로드 파일 저장소
+├── docker-compose.yml           # Docker Compose 설정
+├── railway.json                 # Railway 배포 설정 (신규)
+├── .env.example                 # 환경 변수 템플릿
+└── package.json                 # 프로젝트 설정
 ```
 
-## 🔧 API 엔드포인트
+---
 
-### 확장자 관련
+## 🔌 API 명세
 
-| Method | Endpoint | 설명 |
-|--------|----------|------|
-| `GET` | `/api/extensions/fixed` | 고정 확장자 목록 조회 |
-| `PUT` | `/api/extensions/fixed/:id` | 고정 확장자 차단 상태 변경 |
-| `GET` | `/api/extensions/custom` | 커스텀 확장자 목록 조회 |
-| `POST` | `/api/extensions/custom` | 커스텀 확장자 추가 |
-| `DELETE` | `/api/extensions/custom/:id` | 커스텀 확장자 삭제 |
-| `GET` | `/api/extensions/blocked` | 모든 차단된 확장자 조회 |
+### 확장자 관리 API
 
-### 파일 업로드
+| Method | Endpoint | 설명 | Request | Response |
+|--------|----------|------|---------|----------|
+| `GET` | `/api/extensions/fixed` | 고정 확장자 목록 조회 | - | `[{id, name, is_blocked}]` |
+| `PUT` | `/api/extensions/fixed/:id` | 고정 확장자 차단 상태 변경 | `{is_blocked: boolean}` | `{success, message}` |
+| `GET` | `/api/extensions/custom` | 커스텀 확장자 목록 조회 | - | `[{id, name}]` |
+| `POST` | `/api/extensions/custom` | 커스텀 확장자 추가 | `{name: string}` | `{success, message, id}` |
+| `DELETE` | `/api/extensions/custom/:id` | 커스텀 확장자 삭제 | - | `{success, message}` |
+| `GET` | `/api/extensions/blocked` | 차단된 모든 확장자 조회 | - | `{blocked: [string]}` |
 
-| Method | Endpoint | 설명 |
-|--------|----------|------|
-| `POST` | `/api/upload` | 파일 업로드 (확장자 검증 포함) |
+### 파일 업로드 API
 
-## ✨ 주요 기능
+| Method | Endpoint | 설명 | Request | Response |
+|--------|----------|------|---------|----------|
+| `POST` | `/api/upload` | 파일 업로드 (확장자 검증 포함) | `multipart/form-data` | `{success, message, file}` |
 
-### 1. 파일 업로드
+#### 업로드 응답 예시
 
-- **드래그 앤 드롭**: 파일을 드래그하여 업로드 영역에 놓기
-- **파일 선택**: 클릭하여 파일 탐색기에서 선택
-- **크기 제한**: 최대 10MB
-- **확장자 검증**: 차단된 확장자는 업로드 불가
+**성공:**
+```json
+{
+  "success": true,
+  "message": "파일이 성공적으로 업로드되었습니다.",
+  "file": {
+    "filename": "abc123.png",
+    "originalname": "image.png",
+    "size": 1024567
+  }
+}
+```
+
+**실패 (차단된 확장자):**
+```json
+{
+  "success": false,
+  "message": "exe 확장자는 차단되어 업로드할 수 없습니다."
+}
+```
+
+---
+
+## ✨ 주요 기능 상세
+
+### 1. 파일 업로드 시스템
+
+**기능:**
+- 드래그 앤 드롭 인터페이스
+- 파일 선택 버튼 (클릭)
+- 실시간 업로드 상태 표시
+- 성공/실패 알림
+
+**제약사항:**
+- 최대 파일 크기: 10MB
+- 차단된 확장자 업로드 불가
+- 대소문자 구분 없이 검증
+
+**구현 기술:**
+- Multer 미들웨어로 파일 처리
+- 서버 측 확장자 검증
+- 클라이언트 측 사전 검증
 
 ### 2. 고정 확장자 관리
 
-- 기본 제공 확장자: `bat`, `cmd`, `com`, `cpl`, `exe`, `scr`, `js`
-- 체크박스로 차단 상태 토글
-- **상태 유지**: 페이지 새로고침 시에도 설정 유지 (DB 저장)
+**특징:**
+- 7개 기본 확장자 제공
+- 체크박스 토글로 차단 ON/OFF
+- MySQL DB 저장으로 상태 영구 보존
+- 페이지 새로고침 시에도 유지
+
+**기본 확장자:**
+```
+bat, cmd, com, cpl, exe, scr, js
+```
 
 ### 3. 커스텀 확장자 관리
 
+**기능:**
 - 사용자 정의 확장자 추가
-- **검증 기능**:
-  - 최대 길이: 20자
-  - 중복 확인 (고정 + 커스텀)
-  - 최대 개수: 200개
-- X 버튼으로 삭제
+- 실시간 중복 검증 (고정 + 커스텀)
+- 최대 200개 제한
+- X 버튼으로 개별 삭제
 
-## 🗄️ 데이터베이스 스키마
+**검증 규칙:**
+- 최대 길이: 20자
+- 영문, 숫자만 허용
+- 중복 불가
+- 빈 값 불가
 
-### fixed_extensions 테이블
+---
+
+## 🗄️ 데이터베이스 설계
+
+### ERD
+
+```
+┌─────────────────────────┐      ┌─────────────────────────┐
+│   fixed_extensions      │      │   custom_extensions     │
+├─────────────────────────┤      ├─────────────────────────┤
+│ id (PK)                 │      │ id (PK)                 │
+│ name (UNIQUE)           │      │ name (UNIQUE)           │
+│ is_blocked (BOOLEAN)    │      │ created_at              │
+│ created_at              │      └─────────────────────────┘
+│ updated_at              │
+└─────────────────────────┘
+```
+
+### 테이블 스키마
+
+#### fixed_extensions
 ```sql
 CREATE TABLE fixed_extensions (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(20) NOT NULL UNIQUE,
-    is_blocked BOOLEAN DEFAULT FALSE,
+    name VARCHAR(20) NOT NULL UNIQUE,      -- 확장자명
+    is_blocked BOOLEAN DEFAULT FALSE,      -- 차단 여부
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_name (name),
+    INDEX idx_blocked (is_blocked)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-### custom_extensions 테이블
+#### custom_extensions
 ```sql
 CREATE TABLE custom_extensions (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(20) NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+    name VARCHAR(20) NOT NULL UNIQUE,      -- 확장자명
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
+
+---
 
 ## 🔐 보안 고려사항
 
-- 파일 확장자 대소문자 구분 없이 검증
-- SQL Injection 방지 (Prepared Statements 사용)
-- 파일 크기 제한 (10MB)
-- 차단된 확장자 파일 자동 삭제
-- CORS 설정
+### 구현된 보안 기능
 
-## 🧪 테스트 방법
+1. **SQL Injection 방지**
+   - Prepared Statements 사용
+   - 사용자 입력 파라미터화
 
-1. 서버 실행 후 브라우저에서 `http://localhost:3000` 접속
-2. 고정 확장자 체크박스 선택/해제 후 새로고침하여 상태 유지 확인
-3. 커스텀 확장자 추가 및 삭제 테스트
-4. 차단된 확장자 파일 업로드 시도 (업로드 실패 확인)
-5. 허용된 확장자 파일 업로드 (업로드 성공 확인)
+2. **파일 업로드 보안**
+   - 확장자 검증 (대소문자 무관)
+   - 파일 크기 제한 (10MB)
+   - 차단 확장자 파일 자동 삭제
+   - 안전한 파일명 생성 (UUID)
+
+3. **입력 값 검증**
+   - 확장자 길이 제한 (20자)
+   - 특수문자 필터링
+   - 중복 확인
+
+4. **CORS 설정**
+   - 허용된 origin만 접근 가능
+
+5. **환경 변수 관리**
+   - `.env` 파일로 민감 정보 분리
+   - `.gitignore`로 버전 관리 제외
+
+---
+
+## 🧪 테스트 시나리오
+
+### 1. 고정 확장자 테스트
+1. 초기 상태 확인 (모두 체크 해제)
+2. `exe` 확장자 체크
+3. 페이지 새로고침
+4. ✅ `exe` 체크 상태 유지 확인
+
+### 2. 커스텀 확장자 테스트
+1. `pdf` 확장자 추가
+2. 중복으로 `pdf` 추가 시도
+3. ❌ "이미 존재하는 확장자입니다" 오류 확인
+4. `pdf` 삭제
+5. ✅ 목록에서 제거 확인
+
+### 3. 파일 업로드 테스트
+1. `exe` 확장자 차단
+2. `test.exe` 파일 업로드 시도
+3. ❌ "차단된 확장자" 오류 확인
+4. `image.png` 파일 업로드
+5. ✅ 업로드 성공 확인
+6. `uploads/` 폴더에 파일 저장 확인
+
+---
+
+## 🌐 배포 가이드
+
+### Railway 배포 (권장)
+
+상세한 가이드는 **[DEPLOY.md](./DEPLOY.md)** 참고
+
+**배포 단계 요약:**
+1. Railway 계정 생성 (GitHub 로그인)
+2. "Deploy from GitHub repo" 선택
+3. MySQL 플러그인 추가
+4. 환경 변수 자동 연결
+5. 공개 URL 생성
+6. 배포 완료! 🎉
+
+**소요 시간:** 약 5분
+**비용:** 무료 ($5/월 크레딧 제공)
+
+---
 
 ## 📝 개발 환경
 
@@ -240,32 +439,66 @@ CREATE TABLE custom_extensions (
 - **Express**: v4.18.2
 - **MySQL**: v8.0
 - **Multer**: v2.0.0-rc.4
+- **Docker**: v24.x
+- **Docker Compose**: v2.x
+
+---
 
 ## 🐛 문제 해결
 
 ### MySQL 연결 오류
 ```
-⚠️ 데이터베이스 연결에 실패했습니다.
+❌ MySQL 데이터베이스 연결 실패
 ```
-- `.env` 파일의 MySQL 연결 정보 확인
+**해결:**
+- `.env` 파일의 DB 연결 정보 확인
 - MySQL 서버 실행 여부 확인
-- 데이터베이스 생성 여부 확인
+- 방화벽 설정 확인
 
 ### 포트 충돌
 ```
 Error: listen EADDRINUSE: address already in use :::3000
 ```
-- `.env` 파일에서 `PORT` 변경
-- 또는 기존 프로세스 종료
+**해결:**
+```bash
+# 포트 사용 중인 프로세스 확인
+lsof -i :3000
+
+# 또는 .env에서 포트 변경
+PORT=3001
+```
+
+### 파일 업로드 실패
+```
+❌ 파일 업로드 중 오류가 발생했습니다
+```
+**해결:**
+- 파일 크기 10MB 이하 확인
+- `uploads/` 폴더 권한 확인
+- 디스크 용량 확인
+
+---
 
 ## 📄 라이선스
 
 ISC
 
+---
+
 ## 👨‍💻 개발자
 
-김여명
+**김여명**
+GitHub: [@zpdl768](https://github.com/zpdl768)
 
 ---
 
-**Note**: 이 프로젝트는 마드라스체크 회사의 서버 개발자 과제를 위해 개발되었습니다.
+## 📌 프로젝트 정보
+
+- **과제 제공**: 마드라스체크
+- **포지션**: 서버 개발자
+- **개발 기간**: 2024년 10월
+- **저장소**: https://github.com/zpdl768/flow-assignment
+
+---
+
+**Thank you for reviewing my project! 🙏**

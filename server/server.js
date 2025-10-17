@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const { testConnection } = require('./config/database');
+const { initializeDatabase } = require('./config/initDB');
 const extensionsRouter = require('./routes/extensions');
 const uploadRouter = require('./routes/upload');
 
@@ -47,6 +48,9 @@ const startServer = async () => {
     if (!isConnected) {
       console.error('⚠️  데이터베이스 연결에 실패했습니다. .env 파일을 확인하세요.');
       console.log('ℹ️  서버는 시작되지만 데이터베이스 기능은 사용할 수 없습니다.');
+    } else {
+      // 데이터베이스 초기화 (테이블 생성 및 초기 데이터 삽입)
+      await initializeDatabase();
     }
 
     // 서버 시작
