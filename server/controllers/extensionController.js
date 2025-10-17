@@ -108,12 +108,29 @@ const addCustomExtension = async (req, res) => {
     }
 
     // 커스텀 확장자 추가
-    await pool.query(
+    const [insertResult] = await pool.query(
       'INSERT INTO custom_extensions (name) VALUES (?)',
       [normalizedName]
     );
 
-    res.json({ success: true, message: '커스텀 확장자가 추가되었습니다.' });
+    // 추가된 항목 정보
+    const newExtension = {
+      id: insertResult.insertId,
+      name: normalizedName
+    };
+
+    // 전체 목록 조회 (최신 상태)
+    const [allExtensions] = await pool.query(
+      'SELECT * FROM custom_extensions ORDER BY created_at DESC'
+    );
+
+    res.json({
+      success: true,
+      message: '커스텀 확장자가 추가되었습니다.',
+      data: newExtension,
+      allExtensions: allExtensions,
+      count: allExtensions.length
+    });
   } catch (error) {
     console.error('커스텀 확장자 추가 오류:', error);
     res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });

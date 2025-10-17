@@ -12,16 +12,35 @@ const addCustomBtn = document.getElementById('addCustomBtn');
 const customCount = document.getElementById('customCount');
 const notification = document.getElementById('notification');
 
+// 알림 타이머 저장용 변수
+let notificationTimer = null;
+let uploadResultTimer = null;
+
 // ===== 유틸리티 함수 =====
 
 // 알림 메시지 표시
 function showNotification(message, type = 'info') {
-    notification.textContent = message;
-    notification.className = `notification ${type} show`;
-
-    setTimeout(() => {
+    // 기존 타이머가 있으면 취소하고 사라지는 애니메이션 시작
+    if (notificationTimer) {
+        clearTimeout(notificationTimer);
         notification.classList.remove('show');
-    }, 3000);
+    }
+
+    // 새 알림 내용 설정
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+
+    // 강제 리플로우로 애니메이션 리셋
+    notification.offsetHeight;
+
+    // 새 알림 표시 애니메이션 시작
+    notification.classList.add('show');
+
+    // 2초 후 자동 숨김
+    notificationTimer = setTimeout(() => {
+        notification.classList.remove('show');
+        notificationTimer = null;
+    }, 2000);
 }
 
 // ===== API 호출 함수 =====
@@ -89,7 +108,9 @@ async function addCustomExtension(name) {
 
         if (data.success) {
             showNotification(data.message, 'success');
-            fetchCustomExtensions(); // 목록 새로고침
+            // 서버 응답 데이터로 바로 렌더링 (GET 요청 제거)
+            renderCustomExtensions(data.allExtensions);
+            updateCustomCount(data.count);
             customExtensionInput.value = ''; // 입력 필드 초기화
         } else {
             showNotification(data.message, 'error');
@@ -123,6 +144,15 @@ async function uploadFile(file) {
     const formData = new FormData();
     formData.append('file', file);
 
+    // 기존 타이머가 있으면 취소하고 사라지는 애니메이션 시작
+    if (uploadResultTimer) {
+        clearTimeout(uploadResultTimer);
+        uploadResult.className = 'upload-result';
+        uploadResult.textContent = '';
+        // 강제 리플로우
+        uploadResult.offsetHeight;
+    }
+
     try {
         const response = await fetch(`${API_BASE_URL}/upload`, {
             method: 'POST',
@@ -134,16 +164,40 @@ async function uploadFile(file) {
             uploadResult.className = 'upload-result success';
             uploadResult.textContent = `✅ ${data.message} (${file.name})`;
             showNotification('파일 업로드 성공!', 'success');
+
+            // 2초 후 메시지 자동 숨김
+            uploadResultTimer = setTimeout(() => {
+                uploadResult.className = 'upload-result';
+                uploadResult.textContent = '';
+                uploadResultTimer = null;
+            }, 2000);
         } else {
             uploadResult.className = 'upload-result error';
             uploadResult.textContent = `❌ ${data.message}`;
             showNotification(data.message, 'error');
+
+            // 2초 후 메시지 자동 숨김
+            uploadResultTimer = setTimeout(() => {
+                uploadResult.className = 'upload-result';
+                uploadResult.textContent = '';
+                uploadResultTimer = null;
+            }, 2000);
         }
     } catch (error) {
         console.error('파일 업로드 오류:', error);
         uploadResult.className = 'upload-result error';
         uploadResult.textContent = '❌ 파일 업로드 중 오류가 발생했습니다.';
         showNotification('파일 업로드에 실패했습니다.', 'error');
+
+        // 2초 후 메시지 자동 숨김
+        uploadResultTimer = setTimeout(() => {
+            uploadResult.className = 'upload-result';
+            uploadResult.textContent = '';
+            uploadResultTimer = null;
+        }, 2000);
+    } finally {
+        // 같은 파일을 다시 선택할 수 있도록 input 초기화
+        fileInput.value = '';
     }
 }
 
@@ -193,19 +247,20 @@ function handleFixedExtensionChange(id, isBlocked) {
 
 // 커스텀 확장자 삭제
 function handleDeleteCustomExtension(id) {
-    if (confirm('이 확장자를 삭제하시겠습니까?')) {
-        deleteCustomExtension(id);
-    }
+    deleteCustomExtension(id);
 }
 
 // 커스텀 확장자 추가 버튼 클릭
-addCustomBtn.addEventListener('click', () => {
-    const name = customExtensionInput.value.trim();
-    if (name) {
-        addCustomExtension(name);
-    } else {
-        showNotification('확장자 이름을 입력해주세요.', 'error');
-    }
+addCustomBtn.addEventListener('click', (e) => {
+    // blur 이벤트 이후에도 입력값을 정확히 읽기 위해 setTimeout 사용
+    setTimeout(() => {
+        const name = customExtensionInput.value.trim();
+        if (name) {
+            addCustomExtension(name);
+        } else {
+            showNotification('확장자 이름을 입력해주세요.', 'error');
+        }
+    }, 0);
 });
 
 // 커스텀 확장자 입력 필드에서 Enter 키 처리
