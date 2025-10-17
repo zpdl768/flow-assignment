@@ -58,7 +58,7 @@ section h2 {
 .drop-zone {
     border: 3px dashed #667eea;
     border-radius: 12px;
-    padding: 60px 40px;
+    padding: 48px 40px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
