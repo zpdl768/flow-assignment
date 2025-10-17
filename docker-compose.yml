@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # MySQL 데이터베이스
+  mysql:
+    image: mysql:8.0
+    container_name: file_upload_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: file_upload_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./server/models/db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Node.js 애플리케이션
+  app:
+    build: .
+    container_name: file_upload_app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      DB_NAME: file_upload_db
+      DB_PORT: 3306
+      PORT: 3000
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/app/uploads
+
+volumes:
+  mysql_data:
