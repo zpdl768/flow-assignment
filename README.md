@@ -1,97 +1,38 @@
 # 파일 업로드 시스템 - 확장자 차단 기능
 
 > **마드라스체크 서버 개발자 과제**
-> Node.js + Express + MySQL을 활용한 파일 업로드 및 확장자 차단 시스템
+> Node.js + Express + MySQL을 활용한 파일 확장자 차단 시스템
 
 ---
 
-## 👔 채용담당자님께
+## 👔 채용 담당자께
 
-### ⚡ 빠른 확인 방법 (3가지 중 선택)
+### ⚡ 빠른 확인 방법
 
-#### 1️⃣ 라이브 데모 확인 (가장 빠름 - 10초)
-👉 **[배포된 사이트 바로 확인하기](https://your-app.up.railway.app)** ← 배포 후 링크 업데이트
+👉 **[배포된 사이트 바로 확인하기](https://flow-assignment-production.up.railway.app)
 
 Railway에 배포된 실제 동작 환경을 즉시 확인하실 수 있습니다.
-
-#### 2️⃣ Docker로 로컬 실행 (가장 쉬움 - 1분)
-```bash
-git clone https://github.com/zpdl768/flow-assignment.git
-cd flow-assignment
-docker-compose up
-```
-→ `http://localhost:3000` 접속
-
-**끝!** MySQL 설치, DB 설정 등 모든 것이 자동으로 처리됩니다.
-
-#### 3️⃣ Railway에 직접 배포해보기 (5분)
-상세한 가이드는 **[DEPLOY.md](./DEPLOY.md)** 참고
-- GitHub 계정만 있으면 OK
-- 클릭 몇 번으로 배포 완료
-- DB 초기화 자동 처리
 
 ---
 
 ### 🎯 과제 요구사항 구현 내용
 
 #### ✅ 필수 구현 사항
-- **파일 업로드**: Multer 기반 multipart/form-data 처리
 - **확장자 차단**: 고정 확장자 7개 + 커스텀 확장자 최대 200개
 - **상태 유지**: MySQL DB 저장으로 새로고침 시에도 설정 유지
 - **RESTful API**: 표준 REST 규약 준수
+- **확장자 최대 입력 길이**: 커스텀 확장자의 최대 입력 길이를 20자로 제한
+- **커스텀 확장자 추가, 삭제**: 커스텀 확장자 추가/삭제 가능 + DB에서도 같이 추가/삭제
 
 #### 💎 추가 구현 사항
-- **반응형 UI/UX**: 드래그 앤 드롭 + 파일 선택
+- **반응형 UI/UX**: 드래그 앤 드롭 기능 + 파일 선택 기능
 - **실시간 검증**: 클라이언트/서버 이중 검증
 - **보안 강화**: SQL Injection 방지, 파일 크기 제한
 - **Docker 컨테이너화**: 한 번에 실행 가능한 환경
 - **자동 DB 초기화**: 배포 시 테이블 자동 생성
 - **클라우드 배포**: Railway 무료 호스팅
 
----
-
-### 🛠️ 기술 스택 & 아키텍처
-
-**Backend (Node.js)**
-- Express.js 4.18 - 경량 웹 프레임워크
-- MySQL 8.0 - 관계형 데이터베이스
-- Multer 2.0 - 파일 업로드 미들웨어
-
-**Frontend (Vanilla JS)**
-- HTML5 + CSS3 - 시맨틱 마크업
-- JavaScript ES6+ - 모듈 패턴
-- Fetch API - 비동기 통신
-
-**DevOps**
-- Docker + Docker Compose
-- Railway - 클라우드 배포
-- Git - 버전 관리
-
-**아키텍처 패턴**
-- MVC 구조 (Model-View-Controller)
-- RESTful API 설계
-- 환경 변수 기반 설정 관리
-
----
-
-### 📊 주요 기능 데모
-
-#### 1. 고정 확장자 관리
-- 7개 기본 확장자: `bat`, `cmd`, `com`, `cpl`, `exe`, `scr`, `js`
-- 체크박스로 차단 ON/OFF
-- **DB 저장으로 영구 보존**
-
-#### 2. 커스텀 확장자 관리
-- 사용자 정의 확장자 추가
-- 실시간 중복 검증
-- 최대 200개 제한
-- 삭제 기능
-
-#### 3. 파일 업로드
-- 드래그 앤 드롭 지원
-- 10MB 크기 제한
-- 차단 확장자 업로드 거부
-- 성공/실패 알림
+#### 💡 추가로 고려한 사항
 
 ---
 
@@ -110,88 +51,6 @@ docker-compose up
 - ✅ 커스텀 확장자 추가/삭제 (최대 200개)
 - ✅ RESTful API 구조
 - ✅ 보안 검증 (SQL Injection 방지, 파일 크기 제한)
-
----
-
-## 🚀 빠른 시작
-
-### 🐳 Docker로 실행 (권장 - 가장 쉬움)
-
-```bash
-# 1. 저장소 클론
-git clone https://github.com/zpdl768/flow-assignment.git
-cd flow-assignment
-
-# 2. Docker Compose로 실행 (MySQL + Node.js 모두 자동 실행)
-docker-compose up
-
-# 3. 브라우저에서 접속
-open http://localhost:3000
-```
-
-**끝!** MySQL 설치, DB 생성, 테이블 초기화가 모두 자동으로 처리됩니다.
-
-**종료:**
-```bash
-Ctrl+C 또는 docker-compose down
-```
-
----
-
-### 💻 수동 설치 (Docker 없이)
-
-<details>
-<summary><b>클릭하여 펼치기</b></summary>
-
-#### 사전 요구사항
-- Node.js v14 이상
-- MySQL v8.0
-- npm 또는 yarn
-
-#### 설치 단계
-
-1. **저장소 클론**
-```bash
-git clone https://github.com/zpdl768/flow-assignment.git
-cd flow-assignment
-```
-
-2. **의존성 설치**
-```bash
-npm install
-```
-
-3. **MySQL 데이터베이스 설정**
-```bash
-mysql -u root -p < server/models/db.sql
-```
-
-4. **환경 변수 설정**
-```bash
-cp .env.example .env
-```
-
-`.env` 파일 수정:
-```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_mysql_password  # 실제 비밀번호 입력
-DB_NAME=file_upload_db
-DB_PORT=3306
-PORT=3000
-```
-
-5. **서버 실행**
-```bash
-npm start
-```
-
-6. **접속**
-```
-http://localhost:3000
-```
-
-</details>
 
 ---
 
@@ -266,55 +125,6 @@ flow-assignment/
   "message": "exe 확장자는 차단되어 업로드할 수 없습니다."
 }
 ```
-
----
-
-## ✨ 주요 기능 상세
-
-### 1. 파일 업로드 시스템
-
-**기능:**
-- 드래그 앤 드롭 인터페이스
-- 파일 선택 버튼 (클릭)
-- 실시간 업로드 상태 표시
-- 성공/실패 알림
-
-**제약사항:**
-- 최대 파일 크기: 10MB
-- 차단된 확장자 업로드 불가
-- 대소문자 구분 없이 검증
-
-**구현 기술:**
-- Multer 미들웨어로 파일 처리
-- 서버 측 확장자 검증
-- 클라이언트 측 사전 검증
-
-### 2. 고정 확장자 관리
-
-**특징:**
-- 7개 기본 확장자 제공
-- 체크박스 토글로 차단 ON/OFF
-- MySQL DB 저장으로 상태 영구 보존
-- 페이지 새로고침 시에도 유지
-
-**기본 확장자:**
-```
-bat, cmd, com, cpl, exe, scr, js
-```
-
-### 3. 커스텀 확장자 관리
-
-**기능:**
-- 사용자 정의 확장자 추가
-- 실시간 중복 검증 (고정 + 커스텀)
-- 최대 200개 제한
-- X 버튼으로 개별 삭제
-
-**검증 규칙:**
-- 최대 길이: 20자
-- 영문, 숫자만 허용
-- 중복 불가
-- 빈 값 불가
 
 ---
 
@@ -414,70 +224,6 @@ CREATE TABLE custom_extensions (
 
 ---
 
-## 🌐 배포 가이드
-
-### Railway 배포 (권장)
-
-상세한 가이드는 **[DEPLOY.md](./DEPLOY.md)** 참고
-
-**배포 단계 요약:**
-1. Railway 계정 생성 (GitHub 로그인)
-2. "Deploy from GitHub repo" 선택
-3. MySQL 플러그인 추가
-4. 환경 변수 자동 연결
-5. 공개 URL 생성
-6. 배포 완료! 🎉
-
-**소요 시간:** 약 5분
-**비용:** 무료 ($5/월 크레딧 제공)
-
----
-
-## 📝 개발 환경
-
-- **Node.js**: v18.x
-- **Express**: v4.18.2
-- **MySQL**: v8.0
-- **Multer**: v2.0.0-rc.4
-- **Docker**: v24.x
-- **Docker Compose**: v2.x
-
----
-
-## 🐛 문제 해결
-
-### MySQL 연결 오류
-```
-❌ MySQL 데이터베이스 연결 실패
-```
-**해결:**
-- `.env` 파일의 DB 연결 정보 확인
-- MySQL 서버 실행 여부 확인
-- 방화벽 설정 확인
-
-### 포트 충돌
-```
-Error: listen EADDRINUSE: address already in use :::3000
-```
-**해결:**
-```bash
-# 포트 사용 중인 프로세스 확인
-lsof -i :3000
-
-# 또는 .env에서 포트 변경
-PORT=3001
-```
-
-### 파일 업로드 실패
-```
-❌ 파일 업로드 중 오류가 발생했습니다
-```
-**해결:**
-- 파일 크기 10MB 이하 확인
-- `uploads/` 폴더 권한 확인
-- 디스크 용량 확인
-
----
 
 ## 📄 라이선스
 
@@ -496,7 +242,6 @@ GitHub: [@zpdl768](https://github.com/zpdl768)
 
 - **과제 제공**: 마드라스체크
 - **포지션**: 서버 개발자
-- **개발 기간**: 2024년 10월
 - **저장소**: https://github.com/zpdl768/flow-assignment
 
 ---
