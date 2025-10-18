@@ -1,7 +1,11 @@
 # 파일 업로드 시스템 - 확장자 차단 기능
 
-> **마드라스체크 서버 개발자 과제**
-> Node.js + Express + MySQL을 활용한 파일 확장자 차단 시스템
+
+## 📌 프로젝트 정보
+
+- **포지션**: 서버 개발자
+- **기술 요약**: Node.js + Express + MySQL을 활용한 파일 확장자 차단 시스템
+- **저장소**: https://github.com/zpdl768/flow-assignment
 
 ---
 
@@ -33,6 +37,8 @@ Railway에 배포된 실제 동작 환경을 즉시 확인하실 수 있습니�
 - **클라우드 배포**: Railway 무료 호스팅
 
 #### 💡 추가로 고려한 사항
+- ****:
+
 
 ---
 
@@ -84,50 +90,6 @@ flow-assignment/
 
 ---
 
-## 🔌 API 명세
-
-### 확장자 관리 API
-
-| Method | Endpoint | 설명 | Request | Response |
-|--------|----------|------|---------|----------|
-| `GET` | `/api/extensions/fixed` | 고정 확장자 목록 조회 | - | `[{id, name, is_blocked}]` |
-| `PUT` | `/api/extensions/fixed/:id` | 고정 확장자 차단 상태 변경 | `{is_blocked: boolean}` | `{success, message}` |
-| `GET` | `/api/extensions/custom` | 커스텀 확장자 목록 조회 | - | `[{id, name}]` |
-| `POST` | `/api/extensions/custom` | 커스텀 확장자 추가 | `{name: string}` | `{success, message, id}` |
-| `DELETE` | `/api/extensions/custom/:id` | 커스텀 확장자 삭제 | - | `{success, message}` |
-| `GET` | `/api/extensions/blocked` | 차단된 모든 확장자 조회 | - | `{blocked: [string]}` |
-
-### 파일 업로드 API
-
-| Method | Endpoint | 설명 | Request | Response |
-|--------|----------|------|---------|----------|
-| `POST` | `/api/upload` | 파일 업로드 (확장자 검증 포함) | `multipart/form-data` | `{success, message, file}` |
-
-#### 업로드 응답 예시
-
-**성공:**
-```json
-{
-  "success": true,
-  "message": "파일이 성공적으로 업로드되었습니다.",
-  "file": {
-    "filename": "abc123.png",
-    "originalname": "image.png",
-    "size": 1024567
-  }
-}
-```
-
-**실패 (차단된 확장자):**
-```json
-{
-  "success": false,
-  "message": "exe 확장자는 차단되어 업로드할 수 없습니다."
-}
-```
-
----
-
 ## 🗄️ 데이터베이스 설계
 
 ### ERD
@@ -143,33 +105,6 @@ flow-assignment/
 │ updated_at              │
 └─────────────────────────┘
 ```
-
-### 테이블 스키마
-
-#### fixed_extensions
-```sql
-CREATE TABLE fixed_extensions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(20) NOT NULL UNIQUE,      -- 확장자명
-    is_blocked BOOLEAN DEFAULT FALSE,      -- 차단 여부
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_name (name),
-    INDEX idx_blocked (is_blocked)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-```
-
-#### custom_extensions
-```sql
-CREATE TABLE custom_extensions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(20) NOT NULL UNIQUE,      -- 확장자명
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-```
-
----
 
 ## 🔐 보안 고려사항
 
@@ -193,56 +128,12 @@ CREATE TABLE custom_extensions (
 4. **CORS 설정**
    - 허용된 origin만 접근 가능
 
-5. **환경 변수 관리**
-   - `.env` 파일로 민감 정보 분리
-   - `.gitignore`로 버전 관리 제외
-
----
-
-## 🧪 테스트 시나리오
-
-### 1. 고정 확장자 테스트
-1. 초기 상태 확인 (모두 체크 해제)
-2. `exe` 확장자 체크
-3. 페이지 새로고침
-4. ✅ `exe` 체크 상태 유지 확인
-
-### 2. 커스텀 확장자 테스트
-1. `pdf` 확장자 추가
-2. 중복으로 `pdf` 추가 시도
-3. ❌ "이미 존재하는 확장자입니다" 오류 확인
-4. `pdf` 삭제
-5. ✅ 목록에서 제거 확인
-
-### 3. 파일 업로드 테스트
-1. `exe` 확장자 차단
-2. `test.exe` 파일 업로드 시도
-3. ❌ "차단된 확장자" 오류 확인
-4. `image.png` 파일 업로드
-5. ✅ 업로드 성공 확인
-6. `uploads/` 폴더에 파일 저장 확인
-
----
-
-
-## 📄 라이선스
-
-ISC
-
 ---
 
 ## 👨‍💻 개발자
 
 **김여명**
 GitHub: [@zpdl768](https://github.com/zpdl768)
-
----
-
-## 📌 프로젝트 정보
-
-- **과제 제공**: 마드라스체크
-- **포지션**: 서버 개발자
-- **저장소**: https://github.com/zpdl768/flow-assignment
 
 ---
 
